@@ -48,7 +48,7 @@ void converterTemperatura(float *celsius, float *fahrenheit, float *kelvin) {
     scanf("%f", celsius);
 
     *fahrenheit = (*celsius * 9 / 5) + 32;
-    *kelvin = *celsius + 273.15;
+    *kelvin = *celsius + 273;
 
     printf("\nCelsius: %.2f C", *celsius);
     printf("\nFahrenheit: %.2f F", *fahrenheit);
@@ -97,9 +97,9 @@ int main() {
     printf("\n1 - Calcular Media Ponderada");
     printf("\n2 - Somar Data de Nascimento");
     printf("\n3 - Converter Temperatura");
-    printf("\n4 - Calcular Grandezas Eletricas");
-    printf("\n5 - Calcular Area do Triangulo");
-    printf("\n0 - Sair do Programa");
+    printf("\n4 - Calculo Eletrica");
+    printf("\n5 - Calculo triangulo retangulo");
+    printf("\n6 - Sair do Programa");
     printf("\nEscolha uma opcao: ");
     scanf("%d", &opcao);
 
@@ -119,7 +119,7 @@ int main() {
         case 5:
             calcularAreaTriangulo(&base, &altura, &area);
             break;
-        case 0:
+        case 6:
             printf("\nSaindo do programa...\n");
             break;
         default:
