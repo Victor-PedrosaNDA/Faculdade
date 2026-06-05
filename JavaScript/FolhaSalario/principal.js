@@ -5,8 +5,10 @@ import {
   calcularContribuicaoSindical,
   calcularSalarioLiquido,
 } from "./calculo.js";
+
 import { ImprimirContraCheque, RelatorioGeral } from "./folhasalario.js";
-import readline from "readline";
+
+import fs from "fs";
 
 let ListaProfessores = [
   { nome: "João", HorasTrabalhadas: 160 },
@@ -26,23 +28,22 @@ let ListaProfessores = [
   { nome: "Rafael", HorasTrabalhadas: 105 },
 ];
 
-async function calcularFolhaPagamento(ListaProfessores) {
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-  });
+function calcularFolhaPagamento(Lista) {
+  for (let i = 0; i < Lista.length; i++) {
+    let p = Lista[i];
 
-  const perguntar = (texto) => new Promise((resolve) => rl.question(texto, resolve));
-
-  for (let p of ListaProfessores) {
     p.salarioBruto = calcularSalarioBruto(p.HorasTrabalhadas);
     p.inss = calcularINSS(p.salarioBruto);
     p.ir = calcularIR(p.salarioBruto);
     p.ContribuicaoSindical = calcularContribuicaoSindical(p.salarioBruto);
+
+    console.log("Digite o valor do emprestimo para " + p.nome + " (ou 0 se nao tiver):");
     
-    let entrada = await perguntar(`Informe o valor do emprestimo para o(a) professor(a) ${p.nome} (0 caso nao possua): `);
-    let valorEmprestimo = parseFloat(entrada) || 0;
-    p.emprestimo = valorEmprestimo;
+    let buffer = Buffer.alloc(1024);
+    let bytesLidos = fs.readSync(process.stdin.fd, buffer, 0, 1024, null);
+    let textoDigitado = buffer.toString("utf8", 0, bytesLidos).trim();
+    
+    p.emprestimo = parseFloat(textoDigitado) || 0;
 
     p.salarioLiquido = calcularSalarioLiquido(
       p.salarioBruto,
@@ -53,13 +54,11 @@ async function calcularFolhaPagamento(ListaProfessores) {
     );
   }
 
-  rl.close();
-
-  for (let i = 0; i < ListaProfessores.length; i++) {
-    ImprimirContraCheque(ListaProfessores[i]);
+  for (let i = 0; i < Lista.length; i++) {
+    ImprimirContraCheque(Lista[i]);
   }
 
-  RelatorioGeral(ListaProfessores);
+  RelatorioGeral(Lista);
 }
 
 calcularFolhaPagamento(ListaProfessores);
