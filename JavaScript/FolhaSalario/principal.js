@@ -32,11 +32,16 @@ function calcularFolhaPagamento(ListaProfessores) {
     p.inss = calcularINSS(p.salarioBruto);
     p.ir = calcularIR(p.salarioBruto);
     p.ContribuicaoSindical = calcularContribuicaoSindical(p.salarioBruto);
+    
+    let valorEmprestimo = parseFloat(prompt(`Informe o valor do empréstimo para o(a) professor(a) ${p.nome} (0 caso não possua):`)) || 0;
+    p.emprestimo = valorEmprestimo;
+
     p.salarioLiquido = calcularSalarioLiquido(
       p.salarioBruto,
       p.inss,
       p.ir,
-      p.ContribuicaoSindical
+      p.ContribuicaoSindical,
+      p.emprestimo
     );
   }
 

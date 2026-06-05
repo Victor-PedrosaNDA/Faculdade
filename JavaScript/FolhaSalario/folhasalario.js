@@ -8,6 +8,7 @@ export function ImprimirContraCheque(Professor) {
   console.log("INSS: " + Professor.inss);
   console.log("IR: " + Professor.ir);
   console.log("Contribuição Sindical: " + Professor.ContribuicaoSindical);
+  console.log("Empréstimo Consignado: " + Professor.emprestimo);
   console.log("Salário Líquido: " + Professor.salarioLiquido);
 }
 

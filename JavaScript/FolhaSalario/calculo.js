@@ -18,8 +18,9 @@ export function calcularSalarioLiquido(
   salarioBruto,
   inss,
   ir,
-  contribuicaoSindical
+  contribuicaoSindical,
+  emprestimo
 ) {
-  let TotalDescontos = inss + ir + contribuicaoSindical;
+  let TotalDescontos = inss + ir + contribuicaoSindical + emprestimo;
   return salarioBruto - TotalDescontos;
 }
