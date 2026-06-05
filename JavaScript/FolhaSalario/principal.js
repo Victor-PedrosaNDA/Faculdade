@@ -6,6 +6,7 @@ import {
   calcularSalarioLiquido,
 } from "./calculo.js";
 import { ImprimirContraCheque, RelatorioGeral } from "./folhasalario.js";
+import readline from "readline";
 
 let ListaProfessores = [
   { nome: "João", HorasTrabalhadas: 160 },
@@ -25,15 +26,22 @@ let ListaProfessores = [
   { nome: "Rafael", HorasTrabalhadas: 105 },
 ];
 
-function calcularFolhaPagamento(ListaProfessores) {
-  for (let i = 0; i < ListaProfessores.length; i++) {
-    let p = ListaProfessores[i];
+async function calcularFolhaPagamento(ListaProfessores) {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  const perguntar = (texto) => new Promise((resolve) => rl.question(texto, resolve));
+
+  for (let p of ListaProfessores) {
     p.salarioBruto = calcularSalarioBruto(p.HorasTrabalhadas);
     p.inss = calcularINSS(p.salarioBruto);
     p.ir = calcularIR(p.salarioBruto);
     p.ContribuicaoSindical = calcularContribuicaoSindical(p.salarioBruto);
     
-    let valorEmprestimo = parseFloat(prompt(`Informe o valor do empréstimo para o(a) professor(a) ${p.nome} (0 caso não possua):`)) || 0;
+    let entrada = await perguntar(`Informe o valor do emprestimo para o(a) professor(a) ${p.nome} (0 caso nao possua): `);
+    let valorEmprestimo = parseFloat(entrada) || 0;
     p.emprestimo = valorEmprestimo;
 
     p.salarioLiquido = calcularSalarioLiquido(
@@ -44,6 +52,8 @@ function calcularFolhaPagamento(ListaProfessores) {
       p.emprestimo
     );
   }
+
+  rl.close();
 
   for (let i = 0; i < ListaProfessores.length; i++) {
     ImprimirContraCheque(ListaProfessores[i]);
